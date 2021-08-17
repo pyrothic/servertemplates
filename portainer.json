@@ -3,7 +3,7 @@
     "type": 1,
     "name": "cardigann",
     "title": "Cardigann",
-    "description": "Cardigann, a server for adding extra indexers to Sonarr, SickRage and CouchPotato via Torznab and TorrentPotato proxies. Behind the scenes Cardigann logs in and runs searches and then transforms the results into a compatible format.",
+    "description": "Cardigann, a server for adding extra indexers to Sonarr and Radarr via Torznab and TorrentPotato proxies. Behind the scenes Cardigann logs in and runs searches and then transforms the results into a compatible format.",
     "logo": "https://mediadepot.github.io/templates/img/cardigann.png",
     "image": "linuxserver/cardigann:latest",
     "categories": [
@@ -15,20 +15,20 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/cardigann"
+        "bind": "/opt/kinoplex/apps/cardigann"
       }
     ],
     "env": [
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       }
     ],
@@ -36,93 +36,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.cardigann.loadbalancer.server.port", "value": "5060" },
       { "name": "traefik.http.routers.cardigann.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.cardigann.tls.certresolver", "value": "mydnschallenge" }
-    ]
-  },
-  {
-    "type": 1,
-    "name": "couchpotato",
-    "title": "Couchpotato",
-    "description": "CouchPotato (CP) is an automatic NZB and torrent downloader. You can keep a \"movies I want\"-list and it will search for NZBs/torrents of these movies every X hours. Once a movie is found, it will send it to SABnzbd or download the torrent to a specified directory.",
-    "logo": "https://mediadepot.github.io/templates/img/couchpotato-icon.png",
-    "image": "linuxserver/couchpotato:latest",
-    "categories": [
-      "Downloaders:",
-      "MediaApp:Video"
-    ],
-    "ports": [
-      "5050/tcp"
-    ],
-    "volumes": [
-      {
-        "container": "/config",
-        "bind": "/opt/mediadepot/apps/couchpotato"
-      },
-      {
-        "container": "/downloads",
-        "bind": "/media/storage/downloads/movies"
-      },
-      {
-        "container": "/movies",
-        "bind": "/media/storage/movies"
-      },
-      {
-        "container": "/blackhole",
-        "bind": "/media/temp/blackhole/movies"
-      }
-    ],
-    "env": [
-      {
-        "name": "PGID",
-        "label": "PGID",
-        "default": "15000",
-        "preset": true
-      },
-      {
-        "name": "PUID",
-        "label": "PUID",
-        "default": "15000",
-        "preset": true
-      },
-      {
-        "name": "TZ",
-        "label": "TZ",
-        "default": "America/Los_Angeles"
-      }
-    ],
-    "labels": [
-      { "name": "traefik.enable", "value": "true" },
-      { "name": "traefik.http.services.couchpotato.loadbalancer.server.port", "value": "5050" },
-      { "name": "traefik.http.routers.couchpotato.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.couchpotato.tls.certresolver", "value": "mydnschallenge" }
-    ]
-  },
-  {
-    "type": 1,
-    "name": "duckdns",
-    "title": "DuckDNS",
-    "description": "Duckdns is a free service which will point a DNS (sub domains of duckdns.org) to an IP of your choice.",
-    "logo": "https://mediadepot.github.io/templates/img/duckdns.png",
-    "image": "linuxserver/duckdns:latest",
-    "categories": [
-      "Network:DNS",
-      "Tools:"
-    ],
-    "volumes": [],
-    "env": [
-      {
-        "name": "SUBDOMAINS",
-        "label": "SUBDOMAINS"
-      },
-      {
-        "name": "TOKEN",
-        "label": "TOKEN"
-      },
-      {
-        "name": "TZ",
-        "label": "TZ",
-        "default": "America/Los_Angeles"
-      }
+      { "name": "traefik.http.routers.cardigann.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -141,25 +55,25 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/duplicati"
+        "bind": "/opt/kinoplex/apps/duplicati"
       },
       {
         "container": "/source",
-        "bind": "/opt/mediadepot/apps/"
+        "bind": "/opt/kinoplex/apps/"
       }
     ],
     "env": [
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.duplicati.loadbalancer.server.port", "value": "8200" },
       { "name": "traefik.http.routers.duplicati.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.duplicati.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.duplicati.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -178,19 +92,19 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/duplicacy/config"
+        "bind": "/opt/kinoplex/apps/duplicacy/config"
       },
       {
         "container": "/logs",
-        "bind": "/opt/mediadepot/apps/duplicacy/logs"
+        "bind": "/opt/kinoplex/apps/duplicacy/logs"
       },
       {
         "container": "/cache",
-        "bind": "/opt/mediadepot/apps/duplicacy/cache"
+        "bind": "/opt/kinoplex/apps/duplicacy/cache"
       },
       {
         "container": "/source/apps",
-        "bind": "/opt/mediadepot/apps/"
+        "bind": "/opt/kinoplex/apps/"
       },
       {
         "container": "/source/storage",
@@ -201,14 +115,14 @@
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.duplicacy.loadbalancer.server.port", "value": "3875" },
       { "name": "traefik.http.routers.duplicacy.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.duplicacy.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.duplicacy.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -270,33 +184,33 @@
       },
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/droppy"
+        "bind": "/opt/kinoplex/apps/droppy"
       }
     ],
     "env": [
       {
         "name": "GID",
         "label": "GID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "UID",
         "label": "UID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.droppy.loadbalancer.server.port", "value": "8989" },
       { "name": "traefik.http.routers.droppy.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.droppy.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.droppy.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -359,21 +273,21 @@
       },
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/filebrowser"
+        "bind": "/opt/kinoplex/apps/filebrowser"
       }
     ],
     "env": [
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.filebrowser.loadbalancer.server.port", "value": "8080" },
       { "name": "traefik.http.routers.filebrowser.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.filebrowser.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.filebrowser.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -414,14 +328,14 @@
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.gaps.loadbalancer.server.port", "value": "8484" },
       { "name": "traefik.http.routers.gaps.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.gaps.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.gaps.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -443,26 +357,26 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/healthchecks"
+        "bind": "/opt/kinoplex/apps/healthchecks"
       }
     ],
     "env": [
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       },
       {
         "name": "SITE_ROOT",
@@ -509,7 +423,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.healthchecks.loadbalancer.server.port", "value": "8000" },
       { "name": "traefik.http.routers.healthchecks.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.healthchecks.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.healthchecks.tls.certresolver", "value": "leresolver" }
     ]
   },
 
@@ -534,33 +448,33 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/heimdall"
+        "bind": "/opt/kinoplex/apps/heimdall"
       }
     ],
     "env": [
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.heimdall.loadbalancer.server.port", "value": "80" },
       { "name": "traefik.http.routers.heimdall.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.heimdall.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.heimdall.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -580,7 +494,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/jackett"
+        "bind": "/opt/kinoplex/apps/jackett"
       },
       {
         "container": "/downloads",
@@ -596,216 +510,26 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.jackett.loadbalancer.server.port", "value": "9117" },
       { "name": "traefik.http.routers.jackett.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.jackett.tls.certresolver", "value": "mydnschallenge" }
-    ]
-  },
-  {
-    "type": 3,
-    "name": "klaxon",
-    "title": "Klaxon",
-    "description": "Klaxon is a free, quick to set up and easy to use robot that checks websites regularly so you don't have to.",
-    "logo": "https://mediadepot.github.io/templates/img/klaxon-logo.png",
-    "categories": [
-      "Documents:",
-      "Network:Other",
-      "Tools:"
-    ],
-    "env": [
-      {
-        "name": "SMTP_PROVIDER",
-        "label": "SMTP_PROVIDER",
-        "default": "SENDGRID"
-      },
-      {
-        "name": "SENDGRID_USERNAME",
-        "label": "SENDGRID_USERNAME",
-        "default": ""
-      },
-      {
-        "name": "SENDGRID_PASSWORD",
-        "label": "SENDGRID_PASSWORD",
-        "default": ""
-      },
-      {
-        "name": "ADMIN_EMAILS",
-        "label": "ADMIN_EMAILS",
-        "default": ""
-      }
-    ],
-    "repository": {
-      "url": "https://github.com/mediadepot/templates",
-      "stackfile": "stacks/klaxon/docker-compose.yml"
-    }
-  },
-  {
-    "type": 1,
-    "name": "logzio-logs-collector",
-    "title": "Logzio Logs Collector",
-    "description": "Docker container that uses Filebeat to collect logs from other Docker containers and forward those logs to your Logz.io account.",
-    "logo": "https://mediadepot.github.io/templates/img/logzio-icon.png",
-    "image": "logzio/docker-collector-logs",
-    "categories": [
-      "Tools:"
-    ],
-    "ports": [],
-    "privileged": true,
-    "volumes": [
-      {
-        "container": "/var/run/docker.sock",
-        "bind": "/var/run/docker.sock",
-        "readonly": true
-      },
-      {
-        "container": "/var/lib/docker/containers",
-        "bind": "/var/lib/docker/containers"
-      }
-    ],
-    "env": [
-      {
-        "name": "LOGZIO_TOKEN",
-        "label": "LOGZIO_TOKEN",
-        "default": "REPLACE-LOGZIO-TOKEN-HERE"
-      },
-      {
-        "name": "LOGZIO_URL",
-        "label": "LOGZIO_URL",
-        "default": "listener.logz.io:5015"
-      }
-    ],
-    "labels": []
-  },
-  {
-    "type": 1,
-    "name": "logzio-metrics-collector",
-    "title": "Logzio Metrics Collector",
-    "description": "Docker Metrics Collector is a container that runs Metricbeat with the modules you enable at runtime.",
-    "logo": "https://mediadepot.github.io/templates/img/logzio-icon.png",
-    "image": "logzio/docker-collector-metrics",
-    "categories": [
-      "Tools:"
-    ],
-    "ports": [],
-    "privileged": true,
-    "volumes": [
-      {
-        "container": "/var/run/docker.sock",
-        "bind": "/var/run/docker.sock",
-        "readonly": true
-      },
-      {
-        "container": "/hostfs/sys/fs/cgroup",
-        "bind": "/sys/fs/cgroup",
-        "readonly": true
-      },
-      {
-        "container": "/hostfs/proc",
-        "bind": "/proc",
-        "readonly": true
-      },
-      {
-        "container": "/hostfs",
-        "bind": "/",
-        "readonly": true
-      }
-    ],
-    "env": [
-      {
-        "name": "LOGZIO_TOKEN",
-        "label": "LOGZIO_TOKEN",
-        "default": "REPLACE-LOGZIO-TOKEN-HERE"
-      },
-      {
-        "name": "LOGZIO_MODULES",
-        "label": "LOGZIO_MODULES",
-        "default": "system,docker"
-      }
-    ],
-    "labels": []
-  },
-  {
-    "type": 3,
-    "name": "mayan",
-    "title": "Mayan EDMS",
-    "description": "Mayan EDMS is an electronic vault for your documents.",
-    "logo": "https://mediadepot.github.io/templates/img/mayan-logo.png",
-    "categories": [
-      "Documents:",
-      "Tools:"
-    ],
-    "repository": {
-      "url": "https://github.com/mediadepot/templates",
-      "stackfile": "stacks/mayan/docker-compose.yml"
-    }
-  },
-  {
-    "type": 1,
-    "name": "netbootxyz",
-    "title": "Netboot.xyz",
-    "description": "Netbootxyz is a way to PXE boot various operating system installers or utilities from one place within the BIOS without the need of having to go retrieve the media to run the tool",
-    "logo": "https://mediadepot.github.io/templates/img/netbootxyz.jpg",
-    "image": "linuxserver/netbootxyz:latest",
-    "categories": [
-      "Downloaders:",
-      "Network:Other",
-      "Tools:"
-    ],
-    "ports": [
-      "3000/tcp",
-      "69/udp"
-    ],
-    "volumes": [
-      {
-        "container": "/config",
-        "bind": "/opt/mediadepot/apps/netbootxyz"
-      },
-      {
-        "container": "/assets",
-        "bind": "/media/storage/software/netbootxyz"
-      },
-      {
-        "container": "/etc/localtime",
-        "bind": "/etc/localtime",
-        "readonly": true
-      }
-    ],
-    "env": [
-      {
-        "name": "PGID",
-        "label": "PGID",
-        "default": "15000",
-        "preset": true
-      },
-      {
-        "name": "PUID",
-        "label": "PUID",
-        "default": "15000",
-        "preset": true
-      }
-    ],
-    "labels": [
-      { "name": "traefik.enable", "value": "true" },
-      { "name": "traefik.http.services.netbootxyz.loadbalancer.server.port", "value": "3000" },
-      { "name": "traefik.http.routers.netbootxyz.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.netbootxyz.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.jackett.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -827,7 +551,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/ombi"
+        "bind": "/opt/kinoplex/apps/ombi"
       },
       {
         "container": "/etc/localtime",
@@ -839,13 +563,13 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       }
     ],
@@ -853,7 +577,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.ombi.loadbalancer.server.port", "value": "3579" },
       { "name": "traefik.http.routers.ombi.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.ombi.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.ombi.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -874,7 +598,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/plex"
+        "bind": "/opt/kinoplex/apps/plex"
       },
       {
         "container": "/data/tvshows",
@@ -896,19 +620,19 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       },
       {
         "name": "VERSION",
@@ -940,7 +664,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/plexrequests"
+        "bind": "/opt/kinoplex/apps/plexrequests"
       },
       {
         "container": "/etc/localtime",
@@ -952,13 +676,13 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       }
     ],
@@ -966,7 +690,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.cardigann.plexrequests.server.port", "value": "3000" },
       { "name": "traefik.http.routers.cardigann.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.cardigann.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.cardigann.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -997,7 +721,7 @@
     "volumes": [
       {
         "container": "/etc/pure-ftpd/passwd",
-        "bind": "/opt/mediadepot/apps/pureftp"
+        "bind": "/opt/kinoplex/apps/pureftp"
       },
       {
         "container": "/data/tvshows",
@@ -1044,14 +768,14 @@
       {
         "name": "FTP_USER_NAME",
         "label": "FTP_USER_NAME",
-        "default": "depot",
+        "default": "kinoplex",
         "preset": true
       },
 
       {
         "name": "FTP_USER_PASS",
         "label": "FTP_USER_PASS",
-        "default": "badpass"
+        "default": "SzAq93ZgKN"
       },
       {
         "name": "FTP_USER_HOME",
@@ -1063,19 +787,19 @@
       {
         "name": "FTP_USER_GID",
         "label": "FTP_USER_GID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "FTP_USER_UID",
         "label": "FTP_USER_UID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       },
       {
         "name": "PUBLICHOST",
@@ -1102,7 +826,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/radarr"
+        "bind": "/opt/kinoplex/apps/radarr"
       },
       {
         "container": "/downloads",
@@ -1126,13 +850,13 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       }
     ],
@@ -1140,7 +864,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.radarr.loadbalancer.server.port", "value": "7878" },
       { "name": "traefik.http.routers.radarr.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.radarr.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.radarr.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -1160,11 +884,11 @@
     "volumes": [
       {
         "container": "/srv/rclone/config",
-        "bind": "/opt/mediadepot/apps/rclone"
+        "bind": "/opt/kinoplex/apps/rclone"
       },
       {
         "container": "/mnt/data",
-        "bind": "/opt/mediadepot/apps"
+        "bind": "/opt/kinoplex/apps"
       }
     ]
   },
@@ -1188,7 +912,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/resilio"
+        "bind": "/opt/kinoplex/apps/resilio"
       },
       {
         "container": "/sync",
@@ -1203,35 +927,35 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.resilio.loadbalancer.server.port", "value": "8888" },
       { "name": "traefik.http.routers.resilio.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.resilio.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.resilio.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
     "type": 1,
-    "name": "rutorrent",
-    "title": "ruTorrent",
-    "description": "ruTorrent is a quick and efficient BitTorrent client",
+    "name": "transmission",
+    "title": "Transmission",
+    "description": "Transmission-OpenVPN is a quick and efficient BitTorrent client with a built in VPN",
     "logo": "https://mediadepot.github.io/templates/img/rtorrent-icon.png",
-    "image": "mediadepot/rutorrent",
+    "image": "haugene/transmission-openvpn",
     "categories": [
       "Downloaders:",
       "Network:Other",
@@ -1245,7 +969,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/rutorrent"
+        "bind": "/opt/kinoplex/apps/transmissionvpn"
       },
       {
         "container": "/processing",
@@ -1264,29 +988,34 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
+      },
+      {
+        "OPENVPN_PROVIDER": "WINDSCRIBE",
+        "OPENVPN_USERNAME": "SuspiciousCardKicker",
+        "OPENVPN_PASSWORD": "otI1IPzK3a5p",
+        "LOCAL_NETWORK": "192.168.0.1/16"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
-      { "name": "traefik.http.services.rutorrent.loadbalancer.server.port", "value": "80" },
-      { "name": "traefik.http.routers.rutorrent.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.rutorrent.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.services.transmissionvpn.loadbalancer.server.port", "value": "80" },
+      { "name": "traefik.http.routers.transmissionvpn.entrypoints", "value": "websecure" },
+      { "name": "traefik.http.routers.transmissionvpn.tls.certresolver", "value": "leresolver" }
     ]
   },
-
   {
     "type": 1,
     "name": "scrutiny",
@@ -1303,7 +1032,7 @@
     "volumes": [
       {
         "container": "/scrutiny/config/",
-        "bind": "/opt/mediadepot/apps/scrutiny"
+        "bind": "/opt/kinoplex/apps/scrutiny"
       },
       {
         "container": "/run/udev",
@@ -1316,7 +1045,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.scrutiny.loadbalancer.server.port", "value": "8080" },
       { "name": "traefik.http.routers.scrutiny.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.scrutiny.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.scrutiny.tls.certresolver", "value": "leresolver" }
     ]
   },
 
@@ -1338,7 +1067,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/sickrage"
+        "bind": "/opt/kinoplex/apps/sickrage"
       },
       {
         "container": "/downloads",
@@ -1357,26 +1086,26 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.sickrage.loadbalancer.server.port", "value": "8081" },
       { "name": "traefik.http.routers.sickrage.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.sickrage.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.sickrage.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -1396,7 +1125,7 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/sonarr"
+        "bind": "/opt/kinoplex/apps/sonarr"
       },
       {
         "container": "/downloads",
@@ -1420,13 +1149,13 @@
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       }
     ],
@@ -1434,7 +1163,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.sonarr.loadbalancer.server.port", "value": "8989" },
       { "name": "traefik.http.routers.sonarr.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.sonarr.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.sonarr.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -1453,7 +1182,7 @@
     "volumes": [
       {
         "container": "/data",
-        "bind": "/opt/mediadepot/apps/syncserver"
+        "bind": "/opt/kinoplex/apps/syncserver"
       }
     ],
     "env": [
@@ -1492,7 +1221,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.syncservere.loadbalancer.server.port", "value": "5000" },
       { "name": "traefik.http.routers.syncserver.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.syncserver.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.syncserver.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -1512,33 +1241,33 @@
     "volumes": [
       {
         "container": "/config",
-        "bind": "/opt/mediadepot/apps/tautulli"
+        "bind": "/opt/kinoplex/apps/tautulli"
       }
     ],
     "env": [
       {
         "name": "PGID",
         "label": "PGID",
-        "default": "15000",
+        "default": "1001",
         "preset": true
       },
       {
         "name": "PUID",
         "label": "PUID",
-        "default": "15000",
+        "default": "1000",
         "preset": true
       },
       {
         "name": "TZ",
         "label": "TZ",
-        "default": "America/Los_Angeles"
+        "default": "America/New_York"
       }
     ],
     "labels": [
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.tautulli.loadbalancer.server.port", "value": "8181" },
       { "name": "traefik.http.routers.tautulli.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.tautulli.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.tautulli.tls.certresolver", "value": "leresolver" }
     ]
   },
   {
@@ -1557,7 +1286,7 @@
     "volumes": [
       {
         "container": "/srv/urlwatch/config",
-        "bind": "/opt/mediadepot/apps/urlwatch"
+        "bind": "/opt/kinoplex/apps/urlwatch"
       },
       {
         "container": "/etc/localtime",
@@ -1570,26 +1299,7 @@
       { "name": "traefik.enable", "value": "true" },
       { "name": "traefik.http.services.urlwatch.loadbalancer.server.port", "value": "8081" },
       { "name": "traefik.http.routers.urlwatch.entrypoints", "value": "websecure" },
-      { "name": "traefik.http.routers.urlwatch.tls.certresolver", "value": "mydnschallenge" }
+      { "name": "traefik.http.routers.urlwatch.tls.certresolver", "value": "leresolver" }
     ]
-  },
-  {
-    "type": 1,
-    "name": "watchtower",
-    "title": "Watchtower",
-    "description": "Automatically update running Docker containers",
-    "logo": "https://mediadepot.github.io/templates/img/watchtower-logo.png",
-    "image": "containrrr/watchtower:latest",
-    "command": "--cleanup --label-enable",
-    "categories": [
-      "Tools:"
-    ],
-    "volumes": [
-      {
-        "container": "/var/run/docker.sock",
-        "bind": "/var/run/docker.sock"
-      }
-    ],
-    "env": []
   }
 ]
